@@ -1,0 +1,27 @@
+@import '~bootstrap/scss/bootstrap';
+@import "font-awesome-sprockets";
+@import "font-awesome";
+@import '~@fortawesome/fontawesome-free/scss/fontawesome';
+
+header.span {
+  font-size: 20px;
+}
+
+.error {
+  color: red;
+}
+
+.btn-block{
+  display:block;
+  width:100%;
+}
+
+.btn-info{
+  color:#fff;
+  background-coler:#17a2b8;
+  border-coler:#17a2b8;
+}
+
+header {
+  color: white;
+}

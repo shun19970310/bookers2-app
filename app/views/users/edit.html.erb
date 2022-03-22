@@ -1,32 +1,45 @@
-% if @user.errors.any? %>
-  <%= @user.errors.count %>error prohibited this obj from being saved:
-  <% @user.errors.full_messages.each do |message| %>
-    <%= message %>
-  <% end %>
-<% end %>
-<%= form_with model:@user, local:true do |f| %>
-<p id="notice">
+<!--プロフィール編集画面-->
+<p id="notice" class></p>
   <div class="container">
     <div class="row">
       <div class="col-sm-12 col-md-8 col-lg-5 px-5 px-sm-0 mx-auto">
-        <h1>User info</h1>
+        <h2>User info</h2>
+
+      <!--サクセスメッセージ-->
+        <p id="notice"></p>
+
+      <!--エラーメッセージ-->
+        <div class="error">
+          <% if @user.errors.any? %>
+            <div id="error_explanation">
+              <h2><%= pluralize(@user.errors.count, "error") %> prohibited this product from being saved:</h2>
+              <ul>
+                <% @user.errors.full_messages.each do |message| %>
+                  <li><%= message %></li>
+                <% end %>
+              </ul>
+            </div>
+          <% end %>
+        </div>
+
+      <!--プロフィール編集フォーム-->
+      <%= form_with model:@user, local:true do |f| %>
         <div class="form-group">
-          <h4>name</h4>
-          <%= f.text_field :name %>
+          <label>Name</label>
+          <%= f.text_field :name, class:"form-control user_name" %>
         </div>
         <div class="form-group">
-          <h4>image</h4>
-          <%= f.attachment_field :profile_image %>
+          <label>Image</label>
+          <%= f.file_field :profile_image, class:"form-control-file user_image" %>
         </div>
         <div class="form-group">
-        <h4>Introduction</h4>
-         <%= f.text_area :introduction %>
+          <label>Introduction</label>
+          <%= f.text_area :introduction, class:"form-control user_introduction" %>
         </div>
         <div class="form-group">
-          <%= f.submit 'Update User' %>
+          <%= f.submit class:"btn btn-secondary" %>
         </div>
-        <% end %>
+      <% end %>
       </div>
     </div>
   </div>
-</p>
