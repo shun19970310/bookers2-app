@@ -2,95 +2,93 @@
 <html>
   <head>
     <title>Bookers2</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
+    <!--最後にmaximum-scale=1を追加-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--stylesheet_link_tagをstylesheet_pack_tagに変更-->
     <%= stylesheet_pack_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
 
-  <body>
-    <header>
+  <body class="d-flex flex-column vh-100">
+    <header class="bg-dark text-white">
       <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-      		<a class="navbar-brand" href="/">Bookers</a>
-      	  <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+          <a class="navbar-brand" href="/"><span>Bookers</span></a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
+                        aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
-          <div class="collapse navbar-collapse" id="navbarNavDropdown" style>
+          <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav ml-auto">
-                <% if user_signed_in? %>
-              <li>
-                <%= link_to user_path(current_user.id),class:"nav-link text-light", method: :get do %>
-                  <i class="fas fa-home"></i> Home
-                <% end %>
-              </li>
-              </li>
-              <li>
-                <%= link_to users_path,class:"nav-link text-light", method: :get do %>
-                  <i class="fas fa-users"></i> Users
-                <% end %>
-              </li>
-              <li>
-                <%= link_to books_path,class:"nav-link text-light", method: :get do %>
-                  <i class="fas fa-book-open"></i> Books
-                <% end %>
-              </li>
-              <li>
-                <%= link_to destroy_user_session_path,class:"nav-link text-light", method: :delete do %>
-                  <i class="fas fa-sign-out-alt"></i> Log out
+            <% if user_signed_in? %>
+              <li class="nav-item">
+                <%= link_to user_path(current_user.id), class: 'nav-link text-light' do %>
+                  <i class="fas fa-home"></i>Home
                 <% end %>
               </li>
 
+              <li class="nav-item">
+                <%= link_to users_path, class: 'nav-link text-light' do %>
+                  <i class="fas fa-users"></i>Users
+                <% end %>
+              </li>
+
+              <li class="nav-item">
+                <%= link_to books_path, class: 'nav-link text-light' do %>
+                  <i class="fas fa-book-open"></i>Books
+                <% end %>
+              </li>
+
+              <li class="nav-item">
+                <%= link_to destroy_user_session_path, method: :delete, class: 'nav-link text-light' do %>
+                  <i class="fas fa-sign-out-alt"></i>Log out
+                <% end %>
+              </li>
             <% else %>
-              <li class="my-3 h6">
-                <%= link_to root_path,class:"text-light", method: :get do %>
-                  <i class="fas fa-home"></i> Home
+              <li class="nav-item">
+                <%= link_to "/", class: 'nav-link text-light' do %>
+                  <i class="fas fa-home"></i>Home
                 <% end %>
               </li>
-              <li class="mb-3 h6">
-                <%= link_to about_path, class:"text-light mb-5",method: :get do %>
-                  <i class="fas fa-link"></i> About
+
+              <li class="nav-item">
+                <%= link_to "/home/about", class: 'nav-link text-light' do %>
+                  <i class="fas fa-link"></i>About
                 <% end %>
               </li>
-              <li class="mb-3 h6">
-                <%= link_to new_user_registration_path, class:"text-light mb-5", method: :get do %>
-                  <i class="fas fa-user-plus"></i> Sign up
+
+              <li class="nav-item">
+                <%= link_to new_user_registration_path, class: 'nav-link text-light' do %>
+                  <i class="fas fa-user-plus"></i>Sign up
                 <% end %>
               </li>
-              <li class="mb-3 h6">
-                <%= link_to user_session_path, class:"text-light mb-5", method: :get do %>
-                  <i class="fas fa-sign-in-alt"></i> Log in
+
+              <li class="nav-item">
+                <%= link_to new_user_session_path, class: 'nav-link text-light' do %>
+                  <i class="fas fa-sign-in-alt"></i>Log in
                 <% end %>
               </li>
             <% end %>
-           </ul>
+            </ul>
           </div>
-        </nav>
-        </nav>
-      </div>
+        </div>
+      </nav>
     </header>
-    <main>
-      <% if flash[:notice] %>
-        <div class="notification is-info">
-          <p class="notice text-success"><%= notice %></p>
-        </div>
-      <% end %>
-      <% if flash[:alart] %>
-        <div class="notification is-danger">
-          <p class="alart text-danger"><%= alart %></p>
-        </div>
-      <% end %>
-      <%= yield %>
+    <main class="mb-auto">
+    <%= yield %>
     </main>
-  </body>
-  <footer>
-    <div class="container mt-5">
-      <div class="row">
-        <div class="mx-auto">
-          <p>CopyRight Infratop.inc</p>
+
+    <footer>
+      <div class="container mt-5">
+        <div class="row">
+          <div class="mx-auto">
+            <p>CopyRight Infratop.inc</p>
+          </div>
         </div>
       </div>
-    </div>
-  </footer>
+    </footer>
+  </body>
 </html>

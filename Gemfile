@@ -58,3 +58,4 @@ gem 'devise'
 gem "font-awesome-rails"
 gem 'font-awesome-sass'
 gem 'bootstrap-sass'
+gem 'kaminari','~> 1.2.1'

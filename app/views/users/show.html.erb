@@ -1,37 +1,43 @@
-<div class="container">
-    <!--サイドバー-->
-    <div class="row">
-      <div class="col-md-3">
-        <%= render 'users/userinfo', user: @user %> <!--User infoの部分テンプレート-->
-        <%= render 'books/newbook', book: @book %> <!--New bookの部分テンプレート-->
-      </div>
-      <!--自分の投稿一覧-->
-      <div class="col-md-8 offset-md-1">
-        <h2>Books</h2>
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th><!--ProfileImage--></th>
-              <th>Title</th>
-              <th>Opinion</th>
-              <th colspan="3"></th>
-            </tr>
-          </thead>
+<%= flash[:notice] %>
 
-          <tbody>
-            <% @books.each do |book| %>
-              <tr>
-                <td>
-                  <%= link_to user_path(book.user.id) do %>
-                    <%= image_tag @user.profile_image,size:"40x40" %>
-                  <% end %>
-                </td>
-                <td><%= link_to book.title, book_path(book) %></td> <!--book_path(詳細表示)で(|book|)の投稿(.id)を持ってくる-->
-                <td><%= book.body %></td>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
-      </div>
+<div class="container px-5 px-sm-0">
+  <div class="row">
+    <div class="col-md-3">
+      <%= render 'layouts/userinfo', user: @user %>
+      <%= render 'layouts/newbook', newbook: @newbook %>
     </div>
+
+    <div class="col-md-8 offset-md-1">
+      <h2>Books</h2>
+      <table class="table table-hover table-inverse">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Title</th>
+            <th>Opinion</th>
+            <th colspan="3"></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% @books.each do |book| %>
+            <tr>
+              <td>
+                <%= link_to user_path(book.user.id) do %>
+                  <%= image_tag book.user.get_profile_image(100,100), class:"attachment user profile_image fallback"; %>
+                <% end %>
+              </td>
+              <td>
+                <%= link_to book_path(book.id) do %>
+                  <%= book.title %>
+                <% end %>
+              </td>
+              <td><%= book.body %></td>
+            </tr>
+          <% end %>
+        </tbody>
+
+      </table>
+    </div>
+  </div>
 </div>

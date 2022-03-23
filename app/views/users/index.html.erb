@@ -1,51 +1,38 @@
-<p id="notice"><%= notice %></p>
-<div class="container">
-  <div class="error_messege">
-      <% if @book.errors.any? %>
-        <div id="error_explanation">
-          <h2><%= pluralize(@book.errors.count, "error") %> prohibited this product from being saved:</h2>
-          <ul>
-            <% @book.errors.full_messages.each do |message| %>
-              <li><%= message %></li>
-            <% end %>
-          </ul>
-        </div>
-      <% end %>
-  </div>
-
-    <!--サイドバー-->
+<div class="container px-5 px-sm-0">
   <div class="row">
     <div class="col-md-3">
-        <%= render 'users/userinfo', user: @user %> <!--User infoの部分テンプレート-->
-        <%= render 'books/newbook', book: @book %> <!--New bookの部分テンプレート-->
+      <%= render 'layouts/userinfo', user: @user %>
+      <%= render 'layouts/newbook', newbook: @newbook %>
     </div>
+
     <div class="col-md-8 offset-md-1">
-        <h2>Users</h2>
-        <table class="table table-hover table-striped">
-          <thead>
-            <tr>
-              <th>image</th>
-              <th>name</th>
-              <th><!--show--></th>
-              <th colspan="3"></th>
-            </tr>
-          </thead>
-          <tbody>
+      <h2>Users</h2>
+      <table class="table table-hover table-inverse">
+        <thead>
+          <tr>
+            <th></th>
+            <th>image</th>
+            <th>name</th>
+            <th colspan="3"></th>
+          </tr>
+        </thead>
+
+        <tbody>
           <% @users.each do |user| %>
-            <tr><% if user.profile_image.attached? %>
+            <tr>
               <td>
-                <%= image_tag user.profile_image,size:"40x40" %>
+                <%= image_tag user.get_profile_image(100,100), class:"attachment user profile_image fallback"; %>
               </td>
-                <% else %>
               <td>
-                <%= image_tag'noimage',size:"40x40"%>
+                <%= user.name %>
               </td>
-                <% end %>
-              <td><%= user.name %></td>
-              <td><%= link_to "Show",user_path(user),method: :get %></td>
+              <td>
+                <%= link_to "Show", user_path(user.id) %></td>
+            </tr>
           <% end %>
-          </tbody>
-        </table>
+        </tbody>
+
+      </table>
     </div>
   </div>
 </div>

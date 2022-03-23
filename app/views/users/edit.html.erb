@@ -1,45 +1,43 @@
-<!--プロフィール編集画面-->
-<p id="notice" class></p>
-  <div class="container">
-    <div class="row">
-      <div class="col-sm-12 col-md-8 col-lg-5 px-5 px-sm-0 mx-auto">
-        <h2>User info</h2>
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12 col-md-8 col-lg-5 px-5 px-sm-0 mx-auto">
+      <h1>User info</h1>
 
-      <!--サクセスメッセージ-->
-        <p id="notice"></p>
-
-      <!--エラーメッセージ-->
-        <div class="error">
-          <% if @user.errors.any? %>
-            <div id="error_explanation">
-              <h2><%= pluralize(@user.errors.count, "error") %> prohibited this product from being saved:</h2>
-              <ul>
-                <% @user.errors.full_messages.each do |message| %>
-                  <li><%= message %></li>
-                <% end %>
-              </ul>
-            </div>
+      <% if @user.errors.any? %>
+        <%= @user.errors.count %>error prohibited this obj from being saved:
+        <ul>
+          <% @user.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
           <% end %>
+        </ul>
+      <% end %>
+
+      <%= form_with model: @user, url: update_user_path, method: :patch do |f| %>
+        <div class="form-group">
+          <label for="user_name">Name</label>
+          <div>
+            <%= f.text_field :name %>
+          </div>
         </div>
 
-      <!--プロフィール編集フォーム-->
-      <%= form_with model:@user, local:true do |f| %>
         <div class="form-group">
-          <label>Name</label>
-          <%= f.text_field :name, class:"form-control user_name" %>
+          <label for="user_image">Image</label>
+          <%= f.file_field :profile_image, accept: "image/*", class: "form-control-file user_image" %>
         </div>
+
         <div class="form-group">
-          <label>Image</label>
-          <%= f.file_field :profile_image, class:"form-control-file user_image" %>
+          <label for="user_introduction">Introduction</label>
+          <div>
+            <%= f.text_area :introduction %>
+          </div>
         </div>
+
         <div class="form-group">
-          <label>Introduction</label>
-          <%= f.text_area :introduction, class:"form-control user_introduction" %>
+          <%= f.submit 'Update User', class: "btn btn-secondary" %>
         </div>
-        <div class="form-group">
-          <%= f.submit class:"btn btn-secondary" %>
-        </div>
+
       <% end %>
-      </div>
+
     </div>
   </div>
+</div>
