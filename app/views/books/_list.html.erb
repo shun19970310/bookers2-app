@@ -1,22 +1,50 @@
+<!--@booksを使ってユーザーの投稿一覧を作成-->
+<!-- ユーザーの投稿一覧 -->
+<!--@booksは、users_controller.rbのshowアクション内で定義したインスタンス変数-->
+<!--コントローラから渡された@books変数内から1つずつ取り出して、book変数へ格納-->
+<!--@booksをbooksに変更している(@booksのままだとcontroller側でインスタンス変数の名前や挙動を変更した時、部分テンプレート側も
+変更する必要が出てしまい、再利用しにくいテンプレートになってしまうため)-->
 <div class="card-list-container py-5">
   <% books.each do |book| %>
-
+  <!--投稿部分にはBootstrapのcardというコンポーネントを使用。画像とその詳細について表示するときなどに多く使用されるレイアウト。-->
+    <!--ここで重要なのは「card」class。「card」classには以降の子要素で使用するclassが依存する形になる。
+    その他のclassはサイズ、padding、margin、影を付けるといったcardの構成には関係のないclass。
+    この「card」classを指定さえすれば、その中の要素で使用するものは自由に組むことが出来る。
+    今回のMeshiterroでは投稿に関する情報を「card-body」classで包括し、その中で「投稿したユーザーのアイコン画像を表示する領域」と
+    「投稿に関する情報を表示する領域」をcolによってグリッドで分けている。
+    ※「投稿に関する情報を表示する領域」でcard-titleやcard-textというclassを使用しているが、これらも必ず使わなければいけないという訳ではない-->
     <div class="card w-50 mx-auto mt-4 shadow-lg">
+       <!--book_pathはbooksコントローラのshowアクションの名前付きルート-->
+      <!--link_toでリンク先URL(book_path(book.id))を指定している。(/book/:idで、リンクが作成される)
+      またlink_toでは、doからendの間がaタグで囲まれた状態になる。結果、image_tagはaタグに囲まれたimgタグになる-->
       <%= link_to book_path(book.id) do %>
+      <!--image_tagとは、railsで画像を表示するためのimgタグを作成するヘルパーメソッド-->
+        <!--書式は＜％= image_tag 'ファイル名', 'オプション' ％＞-->
+        <!--image_tagを使いbookにActiveStorageで設定したimageを表示。book.get_imageの部分はBookモデル内に記述したメソッドを呼び出している-->
         <%= image_tag book.get_image, class:"card-img-top"; %>
       <% end %>
       <div class="card-body">
         <div class="row">
           <div class="col-2">
+            <!--一覧画面にユーザーのプロフィール画像を表示出来るようにする-->
+            <!--1. book.userで、投稿画像に紐づいたユーザーの情報(投稿したユーザーの情報)を取得出来る
+            2. 「.user」の部分でUserモデルを使用しているため、Userモデルに記述しているget_profile_imageメソッドが使えるようになる
+            3. 結果、book.user.get_profile_imageと記述することで、投稿画像に紐づいたユーザーのプロフィール画像を表示できる-->
+            <!--book.userでユーザー情報を取得出来るのは、アソシエーション(has_many,belongs_to)を記述して関連性が取れてるから。
+            アソシエーションが設定されているモデルを経由して、メソッドを呼び出している-->
             <%= image_tag book.user.get_profile_image(100,100), class:"mt-3 rounded-circle"; %>
           </div>
           <div class="col-10">
             <p class="card-title">
               <%= link_to(book_path(book.id), class:"text-dark") do %>
+              <!--each文のbook変数のtitleカラムを表示。このカラムはマイグレーションファイルbooks.rbに定義されている-->
                 <strong><i class="far fa-flag"></i><span> <%= book.title %></span></strong>
               <% end %>
             </p>
+            <!--each文のbook変数のbodyカラムを表示。このカラムはマイグレーションファイルbooks.rbに定義されている-->
             <p class="card-text">説明：<%= book.body %></p>
+            <!--book変数のuser_idに関連付けられているuserモデルのnameカラムを表示。 このnameカラムはuserモデルに定義されてるカラムだが、
+            (Bookモデルの入った@bookの入った)book変数は、自身が持つuser_idカラムを元に、そのidのユーザのnameカラムを取りに行ってる-->
             <span><i class="fas fa-user"></i> By <%= book.user.name %> ｜ </span>
           </div>
         </div>

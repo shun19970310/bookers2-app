@@ -16,6 +16,11 @@
 </table>
 
 <div>
+  <!--link_toメソッドを用いた場合、直接ビューファイルに行くのかorコントローラのアクションを挟むのか？-->
+  <!--FontAwesomeアイコンのクラス("fa-solid fa-house")は、アイコンを意味する「iタグ」の中に書かないといけない。
+  link_toメソッドの中に書いてしまうとバグが起こり、リンクが機能しなくなる。
+  Linkの文字に適用するクラス('nav-link text-light')は、link_toメソッドの中に記述する-->
+  <!--link_toからendで囲った部分がリンク扱いになるので、アイコン(iタグ)や文字はこの中に入れる-->
   <%= link_to edit_user_path(user.id), class:"btn btn-outline-secondary btn-block" do %>
     <i class="fas fa-user-cog"></i>
   <% end %>

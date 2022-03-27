@@ -14,17 +14,49 @@
 
   <body class="d-flex flex-column vh-100">
     <header class="bg-dark text-white">
+      <!--下のnav要素に付与された各classの役割は以下の通り。
+      navbar：ナビゲーションバーの表示
+      navbar-expand-[ブレークポイント]：指定したブレークポイント(画面幅)に応じてナビゲーションバー、ナビゲーションアイコン(ハンバーガーメニュー)を切り替えて表示
+      navbar-[カラースキーム]：ナビゲーションのカラースキームの指定
+      ※この3つのclassはセットで使用するように覚えておく。(例えば、navbar-[カラースキーム]の指定がないと画面幅が変化した時に、ナビゲーションアイコン
+      (ハンバーガーメニュー)に配色が当たらないために画面上には要素は存在するが、見えないといったことが起こってしまう-->
       <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
+          <!--ロゴ部分を構成する部分。付与されたclassの役割は以下の通り。
+          navbar-brand：ロゴに使用されるnavbarのサポートclass-->
           <a class="navbar-brand" href="/"><span>Bookers</span></a>
+          <!--ナビゲーションアイコン（ハンバーガーメニュー）の表示部分。
+          button要素のnavbar-togglerとspan要素のnavbar-toggler-iconがナビゲーションアイコン（ハンバーガーメニュー）の見た目に関わる部分。
+          navbar-toggler：ナビゲーションアイコン（ハンバーガーメニュー）の枠部分
+          navbar-toggler-icon：ナビゲーションアイコン（ハンバーガーメニュー）の三本線部分
+          ※この三本線はnavbar-toggler-iconのclassに対してbackground-imageで画像が割り当てられている。
+          検証ツールでnavbar-toggler-iconのclassを確認すると分かやすい-->
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
                         aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
+          <!--以下はナビゲーションアイコンを開いたり、閉じたりする動作と見た目の部分に関するコード。button要素と関係するため、合わせて見ていく-->
+          <!--ナビゲーションアイコンの開閉する動作についてはBootstrapとjQueryが内部的に行っている部分です。
+          ここは複雑な仕組みのため、以下のように簡単に覚えておくといい。
+            ・ナビゲーションアイコンを開く前に隠しておきたいメニューは「collapse」classが付与された要素(div要素)の中に入れておく。
+            ・「collapse」classを付与している要素(div要素)に任意のid("navbarNavDropdown")を付与する
+            ・付与したidは「navbar-toggler」classが付与される要素(button)のdata-targetに指定する（頭にセレクタ#をつける）
+            ・要約すると、以上の事と、「navbar-toggler」classが付与される要素(button)にdata-toggle="collapse"、data-target="#[id名]"、
+            aria-controls="[id名]"、aria-expanded="false"、aria-label="Toggle navigation"を指定をする事で、ナビゲーションアイコンの開閉を行う事が可能になる。
+            ※この内data-toggle="collapse"、data-target="#[id名]"は必ず指定しなければ、開閉を行うことが出来ないので注意-->
           <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav ml-auto">
+              <!--＜% if user_signed_in? %＞は、devise 側で用意しているヘルパーメソッド。
+            deviseの機能を使ってログインしているか、ログインしていないかを判断し、どちらかによってブラウザに表示する内容を変更する。
+            =>ログイン済みならばtrue、ログインしていなければfalseが返ってくる。
+            ログイン済みの場合、＜% if user_signed_in? %＞から＜% else %＞間のコードが表示される。
+            ログインしていない場合、＜% else %＞から＜% end %＞間のコードが表示される-->
             <% if user_signed_in? %>
               <li class="nav-item">
+                <!--FontAwesomeアイコンのクラス("fa-solid fa-house")は、アイコンを意味する「iタグ」の中に書かないといけない。
+                link_toメソッドの中に書いてしまうとバグが起こり、リンクが機能しなくなる。
+                Linkの文字に適用するクラス('nav-link text-light')は、link_toメソッドの中に記述する-->
+                <!--link_toからendで囲った部分がリンク扱いになるので、アイコン(iタグ)や文字はこの中に入れる-->
                 <%= link_to user_path(current_user.id), class: 'nav-link text-light' do %>
                   <i class="fas fa-home"></i>Home
                 <% end %>
@@ -43,6 +75,10 @@
               </li>
 
               <li class="nav-item">
+                <!--ユーザ登録後はログイン状態になる。このままではずっとログイン状態のため、ログアウト機能を実装する必要がある。
+                deviseによってすでに機能自体は作成されているため、実装しなければならないのはログアウト用のリンクのみ。
+                ただし、ログアウトはHTTPメソッドがDELETEであることに注意。(link_toのHTTPメソッドは、特に設定しなければGETになる)
+                link_toヘルパーのmethodオプションを設定して、ログアウトリンクを作成する-->
                 <%= link_to destroy_user_session_path, method: :delete, class: 'nav-link text-light' do %>
                   <i class="fas fa-sign-out-alt"></i>Log out
                 <% end %>

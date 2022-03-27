@@ -1,11 +1,22 @@
-
+<!--ここはどういう仕組みでエラーメッセージの表示まで行っているのか？-->
+<!--以下の3行のコードのコメントアウトを外すと、:notice内のメッセージが二つも同じものが表示されるのは何故？-->
 <%= flash[:notice] %>
 
 <div class="container px-5 px-sm-0">
   <div class="row">
     <div class="col-md-3">
+      <!-- ユーザーの投稿一覧 -->
+      <!--部分テンプレートを呼び出せるように設定-->
+      <!--＜%= render [部分テンプレートファイルの指定], [ローカル変数]:[渡す値] %＞-->
+      <!--この時、Viewから渡される変数(ローカル変数)が使えるように変更する-->
       <%= render 'layouts/userinfo', user: @user %>
       <%= render 'layouts/newbook', newbook: @newbook %>
+      <!--〜テンプレートファイルを呼び出す記述について〜-->
+      <!--１.部分テンプレートファイルを呼び出すにはrenderを使う。
+          ２.'layouts/userinfo'で部分テンプレートのパスを記述する。その際、アンダースコアは省略する。
+          ※パスはlayouts/userinfo.html.erbが本来の呼び出し方。今回、拡張子は省略出来るが、違うフォルダに部分テンプレートがあるため、
+          フォルダ名は指定する必要がある。
+          ３.最後に、ローカル変数userに渡すインスタンス変数（@user）を指定する-->
     </div>
 
     <div class="col-md-8 offset-md-1">
@@ -36,15 +47,26 @@
               <% end %>
             </td>
             <td><%= @book.body %></td>
-
+            <!--tdタグは並列して使う必要がある。その為、<div class="btn btn-sm btn-success">といった文をtdタグの前に置いて挟んでしまうと、
+            classがdivタグそのものに適用されてしまうので、classはtdタグ自体に適用する必要がある。
+            ちなみに文字に適用するCSS('text-light')はlink_toメソッドの中に記述する-->
             <td class="btn btn-sm btn-success">
+              <!--current_user=>コードに記述するだけで、ログイン中のユーザー情報を取得出来る。ログインユーザーのUserモデルに紐付いたカラム情報(name,id等)も
+              取得出来る。ヘルパーメソッドと呼ばれるものの一種で、devise をインストールすることで使用が可能-->
+              <!--if文を使っている目的としては「ログインしているユーザー本人のみに対して編集リンクを表示させる」という状況を作りたいから。
+              これは、他のユーザーが勝手に自分の情報を編集できてしまう状態では、他のユーザーの情報まで編集されてしまったり、
+              なりすまし等も起こってしまうため。具体的に言うと、画面に表示しているユーザーと、ログインしているユーザーのIDが一致するか確認し、
+              一致していれば「プロフィール編集リンク」を表示させるという処理を行うために、if文を使用している-->
               <% if @book.user_id == current_user.id %>
                 <%= link_to "Edit", edit_book_path(@book.id), class: 'text-light' %>
               <% end %>
             </td>
 
             <td class="btn btn-sm btn-danger">
+
               <% if @book.user_id == current_user.id %>
+                <!--% %なら出力しない（ifやeachなどの制御文）など、%= %なら出力         -->
+                <!--link_toはaタグの役割で、下なら第一引数のdestroyをクリックすると指定したbook_pathに遷移するコマンドにあたる-->
                 <%= link_to "Destroy", destroy_book_path(@book.id), method: :delete, class: 'text-light', "data-confirm" => "本当に消しますか？" %>
               <% end %>
             </td>

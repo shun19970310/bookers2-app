@@ -1,18 +1,27 @@
 <div class="container">
   <div class="row">
     <div class="col-sm-12 col-md-8 col-lg-5 px-5 px-sm-0 mx-auto">
-      <h1>Editing Book</h1>
 
+      <h1>Editing Book</h1>
+      <!--errors…モデルにバリデーションをかけた時に、発生したエラーの内容を確認出来るメソッド。
+      any? と組み合わせることで、エラーが発生しているかどうかを判定出来る。
+      また、full_messagesと組み合わせることで、エラーの内容を出力出来る。 (この時、エラー文は配列で保存されているため、eachを使う)-->
       <% if @book.errors.any? %>
         <%= @book.errors.count %>errors prohibited this book from being saved:
         <ul>
           <% @book.errors.full_messages.each do |message| %>
-            <li><%= message %></li>
+            <li><%= message %></li><!--ここで配列|message|から取り出した、該当のエラーメッセージを出力している-->
           <% end %>
         </ul>
       <% end %>
-
+      <!--form_with…viewファイルで使用することが出来る、フォームの作成に用いられるメソッド。-->
+      <!--|f|の部分はブロック変数と言い、特定の範囲内で使える変数のこと。今回だとform_withのdoからendまでの範囲で使える。-->
+      <!--このブロック変数「f」には設定したmodelの情報(今回であればBook.new or @book)も含まれている-->
       <%= form_with model: @book, url: update_book_path, method: :patch do |f| %>
+      <!--「:title」の部分にはプロパティが入ることになり、ブロック変数「f」にはBookモデルの情報も入っているため、
+        このプロパティ名をtitleとすることで、BookモデルにあるtitleカラムだとRailsは判別することができ、DBに保存することが出来る-->
+        <!--ヘルパー(モデルオブジェクト)「text_field」は単一行のテキストフィールドを提供する部品-->
+        <!--「f.text_field」「f.text_area」「f.submit」の「f」はブロック変数「f」のことだよー　byメンター-->
         <div class="form-group">
           <label for="book_title">Title</label>
           <div>
@@ -22,6 +31,7 @@
 
         <div class="form-group">
           <label for="book_opinion">Opinion</label>
+          <!--ヘルパー(モデルオブジェクト)「text_area」は複数行のテキストフィールドを提供する部品-->
           <div>
             <%= f.text_area :body %>
           </div>
@@ -29,7 +39,7 @@
 
         <%= f.submit 'Update Book', class: "btn btn-success" %>
       <% end %>
-
+      <!--名前付きルートには""はいらない-->
       <%= link_to "Show", book_path(@book.id) %>
 
       |

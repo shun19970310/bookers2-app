@@ -1,8 +1,18 @@
 <div class="container px-5 px-sm-0">
   <div class="row">
     <div class="col-md-3">
+      <!-- ユーザーの投稿一覧 -->
+      <!--部分テンプレートを呼び出せるように設定-->
+      <!--＜%= render [部分テンプレートファイルの指定], [ローカル変数]:[渡す値] %＞-->
+      <!--この時、Viewから渡される変数(ローカル変数)が使えるように変更する-->
       <%= render 'layouts/userinfo', user: @user %>
       <%= render 'layouts/newbook', newbook: @newbook %>
+      <!--〜テンプレートファイルを呼び出す記述について〜-->
+      <!--１.部分テンプレートファイルを呼び出すにはrenderを使う。
+          ２.'layouts/userinfo'で部分テンプレートのパスを記述する。その際、アンダースコアは省略する。
+          ※パスはlayouts/userinfo.html.erbが本来の呼び出し方。今回、拡張子は省略出来るが、違うフォルダに部分テンプレートがあるため、
+          フォルダ名は指定する必要がある。
+          ３.最後に、ローカル変数userに渡すインスタンス変数（@user）を指定する-->
     </div>
 
     <div class="col-md-8 offset-md-1">
@@ -18,6 +28,8 @@
         </thead>
 
         <tbody>
+          <!--eachメソッドは、配列やハッシュがもつ要素を順番に取得して処理を実行する-->
+          <!--@books.eachと記述することで、Bookレコードの数だけ繰り返し処理を行う。各レコードの内容はbookという変数に格納される-->
           <% @users.each do |user| %>
             <tr>
               <td>
@@ -28,6 +40,8 @@
               </td>
               <td>
                 <%= link_to "Show", user_path(user.id) %></td>
+                <!--書式は、「link_to 表示させるテキスト , リンク先URL [,オプション]」　※今回、オプションは設定しない-->
+            <!--リンク先URLの例　１.普通のURLの場合："/books/#{book.id}"　２.名前付きルートの場合：book_path(book.id)-->
             </tr>
           <% end %>
         </tbody>
